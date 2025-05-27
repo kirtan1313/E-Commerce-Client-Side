@@ -12,6 +12,8 @@ import KidsProducts from './Componets/KidsProducts/KidsProduts';
 // import Shop from './Componets/Shop/Shop';
 import Contact from './Componets/Contact/Contact';
 import { AnimatePresence, motion } from 'framer-motion';
+import Login from './Componets/Login/Login';
+import SignUp from './Componets/Register/Register';
 
 function App() {
   const theme = createTheme({
@@ -129,6 +131,36 @@ function App() {
                   style={{ minHeight: '100vh' }}
                 >
                   <Contact />
+                </motion.div>
+              }
+            />
+
+            <Route
+              path="/login"
+              element={
+                <motion.div
+                  variants={pageTransition}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  style={{ minHeight: '100vh' }}
+                >
+                  <Login />
+                </motion.div>
+              }
+            />
+
+            <Route
+              path="/signIn"
+              element={
+                <motion.div
+                  variants={pageTransition}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  style={{ minHeight: '100vh' }}
+                >
+                  <SignUp />
                 </motion.div>
               }
             />

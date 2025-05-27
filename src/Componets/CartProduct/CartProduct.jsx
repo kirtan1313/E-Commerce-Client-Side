@@ -2,24 +2,52 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import axios from 'axios';
+import { useLocation } from 'react-router';
 
 function CartProduct() {
     const [cartItems, setCartItems] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
-    // Fetching the cart products from the API
+    const location = useLocation();
+
+    // Fetch cart products from the API
     useEffect(() => {
-        axios
-            .get('http://localhost:3005/cartPro')
+        axios.get('http://localhost:3005/cartPro')
             .then((response) => {
-                console.log('API Response:', response.data || []);
-                setCartItems(response.data || []);
+                setCartItems(response.data[0]?.products || []);
             })
             .catch((error) => console.error('Error fetching products:', error));
-    }, []);
+    }, [refresh]);
 
-    // Remove a product from the cart
+    useEffect(() => {
+        if (location.state && location.state.updatedProduct) {
+            const updatedProduct = location.state.updatedProduct;
+
+            setCartItems((prevProducts) =>
+                prevProducts.map((product) =>
+                    product._id === updatedProduct._id
+                        ? { ...product, ...updatedProduct }
+                        : product
+                )
+            );
+        }
+    }, [location.state]);
+
+
+
+
     const handleRemove = (_id) => {
-        setCartItems(cartItems.filter(item => item._id !== _id));
+
+        axios.delete(`http://localhost:3005/cartPro/${_id}`)
+            .then((response) => {
+                setCartItems((prevItems) =>
+                    prevItems.filter((items) => items._id !== _id)
+                )
+            })
+            .catch((error) => {
+                console.error("Error deleting product:", error);
+            });
+
     };
 
     // Adjust product quantity
@@ -49,8 +77,7 @@ function CartProduct() {
                 <>
                     {/* Render each product in the cart */}
                     {cartItems.map((item) => {
-                        console.log('cartdata',cartItems);
-                        
+                        const imageUrl = `http://localhost:3005/${item.img}`;
                         return (
                             <Box
                                 key={item._id}
@@ -65,18 +92,19 @@ function CartProduct() {
                             >
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     <img
-                                        src={item.img}
-                                        alt={item.productName}
+                                        src={imageUrl || 'https://via.placeholder.com/80'}
+
+                                        alt={item.productName || 'Product'}
                                         style={{
                                             width: '80px',
                                             height: '80px',
-                                            objectFit: 'cover',
+                                            // objectFit: 'cover',
                                             borderRadius: '8px',
                                         }}
                                     />
                                     <Box>
-                                        <Typography variant="h6">{item.productName}</Typography>
-                                        <Typography variant="body2">Price: ${item.price}</Typography>
+                                        <Typography variant="h6">{item.productName || 'No Name'}</Typography>
+                                        <Typography variant="body2">Price: ${item.price || 0}</Typography>
                                     </Box>
                                 </Box>
 
@@ -87,7 +115,7 @@ function CartProduct() {
                                     >
                                         -
                                     </Button>
-                                    <Typography>{item.quantity}</Typography>
+                                    <Typography>{item.quantity || 1}</Typography>
                                     <Button
                                         variant="outlined"
                                         onClick={() => handleQuantityChange(item._id, 1)}

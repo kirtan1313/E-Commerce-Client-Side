@@ -26,25 +26,7 @@ const MensProducts = () => {
       });
   }, []);
 
-  // Event Handlers
-  // const handleAddToCart = (product) => {
-  //   axios.post("http://localhost:3005/cartPro", {
-  //     productId: product._id,
-  //     productName: product.productName,
-  //     price: product.price,
-  //     quantity: 1, 
-  //     image: product.img,
-  //   }).then((response) => {
-  //     console.log("Product added to cart:", response.data);
-  //     alert(`${product.productName} added to cart successfully!`);
-  //   }).catch((error) => {
-  //     console.error("Error adding product to cart:", error);
-  //     alert("Failed to add product to cart. Please try again.");
-  //   });
-
-  //   console.log('check img', product.img);
-
-  // };
+  
 
   const handleAddToCart = (product) => {
     const { _id: productId, img,productName } = product;

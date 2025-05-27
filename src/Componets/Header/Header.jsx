@@ -1,15 +1,51 @@
 import { AppBar, Box, Button, List, ListItem, TextField, Toolbar, IconButton } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../../assets/imags/logo.png';
 import { CiHeart, CiSearch, CiShoppingCart } from 'react-icons/ci';
 import CloseIcon from '@mui/icons-material/Close';
 import OffCanvas from '../OffCanvas/OffCanvas';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import axios from 'axios';
 
 function Header() {
     const [showSearch, setShowSearch] = useState(false);
     const [activeItem, setActiveItem] = useState('Home');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [refresh, setRefresh] = useState(false);
     const navigate = useNavigate();
+
+    const [cartlenght, setCartlenght] = useState([])
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:3005/cartPro')
+            .then((response) => {
+                console.log('API Response:', response.data[0]?.products);
+                setCartlenght(response.data[0]?.products || []);
+            })
+            .catch((error) => console.error('Error fetching products:', error));
+    }, [refresh]);
+
+
+    const handleSearchNavigate = () => {
+        const normalizedQuery = searchQuery.toLowerCase();
+
+        if (normalizedQuery.includes("men")) {
+            navigate('/mens');
+        } else if (normalizedQuery.includes("kids")) {
+            // Navigate to women's page
+            navigate('/kids');
+            console.log('Navigating to Women\'s page');
+        } else if (normalizedQuery.includes("women")) {
+
+            navigate('/womens');
+        } else {
+            alert('No matching category found!');
+        }
+        setShowSearch(false);
+    };
+
+
 
     const toggleSearch = () => {
         setShowSearch((prev) => !prev);
@@ -18,8 +54,6 @@ function Header() {
     const handleSetActive = (item, path) => {
         setActiveItem(item);
         navigate(path)
-        console.log("path", path);
-
     };
     const menuItems = [
         { name: 'Home', path: '/' },
@@ -30,7 +64,7 @@ function Header() {
         { name: 'Contact', path: '/contact' },
     ];
 
- 
+
 
     return (
         <>
@@ -96,7 +130,11 @@ function Header() {
 
                     {/* Icons Section */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2, cursor: 'pointer' }}>
-                        <Box sx={{ color: 'gray' }}>Login/Register</Box>
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Link to="/login" style={{ textDecoration: 'none' }}>
+                                <Box sx={{ color: 'gray' }}>Login</Box>
+                            </Link>
+                        </Box>
                         <Box
                             sx={{
                                 fontSize: '25px',
@@ -144,7 +182,7 @@ function Header() {
                                 left: '15px'
                             }}>
 
-                                2
+                                {cartlenght.length}
                             </Box>
                         </Box>
                     </Box>
@@ -153,40 +191,26 @@ function Header() {
 
             {/* Search Overlay */}
             {showSearch && (
-                <Box
-                    sx={{
-                        position: 'fixed',
-                        top: '10px',
-                        left: 0,
-                        width: '100%',
-                        bgcolor: 'white',
-                        zIndex: 1000,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
-                    }}
-                >
+                <Box sx={{ position: 'fixed', top: '10px', left: 0, width: '100%', bgcolor: 'white', zIndex: 1000, display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0px 4px 6px rgba(0,0,0,0.1)' }}>
                     {/* Search Input */}
                     <TextField
                         fullWidth
-                        f
                         variant="outlined"
                         placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         InputProps={{
                             style: { fontSize: '16px' },
                         }}
                     />
 
+                    {/* Search Button */}
+                    <Button onClick={handleSearchNavigate} sx={{ ml: 2 }}>
+                        Search
+                    </Button>
+
                     {/* Close Button */}
-                    <IconButton
-                        sx={{
-                            ml: 2,
-                            bgcolor: 'transparent',
-                            '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.1)' },
-                        }}
-                        onClick={toggleSearch}
-                    >
+                    <IconButton sx={{ ml: 2, bgcolor: 'transparent', '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.1)' } }} onClick={toggleSearch}>
                         <CloseIcon sx={{ color: 'black', fontSize: 30 }} />
                     </IconButton>
                 </Box>
