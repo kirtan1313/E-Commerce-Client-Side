@@ -12,6 +12,7 @@ function Header() {
     const [activeItem, setActiveItem] = useState('Home');
     const [searchQuery, setSearchQuery] = useState('');
     const [refresh, setRefresh] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     const [cartlenght, setCartlenght] = useState([])
@@ -64,7 +65,28 @@ function Header() {
         { name: 'Contact', path: '/contact' },
     ];
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token); // Set to true if token exists
 
+        // Listen for login/logout events
+        const handleAuthChange = () => {
+            const token = localStorage.getItem("token");
+            setIsLoggedIn(!!token);
+        };
+
+        window.addEventListener("authChange", handleAuthChange);
+        return () => {
+            window.removeEventListener("authChange", handleAuthChange);
+        };
+    }, []);
+
+
+    const handleLogout = () => {
+        localStorage.removeItem("token"); // Clear the token
+        window.dispatchEvent(new Event("authChange")); // Notify listeners
+        navigate("/login"); // Redirect to login page
+    };
 
     return (
         <>
@@ -131,9 +153,42 @@ function Header() {
                     {/* Icons Section */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2, cursor: 'pointer' }}>
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                            <Link to="/login" style={{ textDecoration: 'none' }}>
-                                <Box sx={{ color: 'gray' }}>Login</Box>
-                            </Link>
+                            {isLoggedIn ? (
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleLogout}
+                                    sx={{
+                                        textTransform: "none",
+                                        borderRadius: 4,
+                                        paddingX: 3,
+                                        backgroundColor: "#ff4d4d",
+                                        "&:hover": {
+                                            backgroundColor: "#ff3333",
+                                        },
+                                    }}
+                                >
+                                    Logout
+                                </Button>
+                            ) : (
+                                <Link to="/login" style={{ textDecoration: "none" }}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{
+                                            textTransform: "none",
+                                            borderRadius: 4,
+                                            paddingX: 3,
+                                            backgroundColor: "#007bff",
+                                            "&:hover": {
+                                                backgroundColor: "#0056b3",
+                                            },
+                                        }}
+                                    >
+                                        Login
+                                    </Button>
+                                </Link>
+                            )}
                         </Box>
                         <Box
                             sx={{
