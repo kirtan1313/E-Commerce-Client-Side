@@ -95,7 +95,7 @@ const WomensProducts = () => {
                     alt={data.productName}
                     sx={{
                       width: "100%",
-                      height: "auto",
+                      height: "300px",
                       borderRadius: "8px",
                       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                       "&:hover": {

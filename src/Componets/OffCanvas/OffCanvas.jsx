@@ -19,6 +19,7 @@ const OffCanvas = () => {
         { name: "Kid's", path: '/kids' },
         // { name: 'Shop', path: '/shop' },
         { name: 'Contact', path: '/contact' },
+        { name: 'LogIn', path: '/login' },
     ];
 
     const handleSetActive = (item, path) => {
@@ -122,70 +123,6 @@ const OffCanvas = () => {
                             <IoMdClose color="black" fontSize="20px" />
                         </Button>
                     </Box>
-
-                    {/* Icons Section */}
-                    {/* <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'start',
-                            alignItems: 'center',
-                            gap: 2,
-                            paddingTop: '30px',
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                fontSize: '25px',
-                                color: 'black',
-                                fontWeight: 700,
-                            }}
-                            onClick={toggleSearch}
-                        >
-                            <CiSearch />
-                        </Box>
-                        <Box sx={{ fontSize: '25px', position: 'relative', color: 'black', fontWeight: 700 }} onClick={() => navigate('/wishlist')}>
-                            <CiHeart />
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    bgcolor: 'black',
-                                    color: 'white',
-                                    fontSize: '11px',
-                                    width: '18px',
-                                    height: '18px',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    top: '-7px',
-                                    left: '15px',
-                                }}
-                            >
-                                2
-                            </Box>
-                        </Box>
-                        <Box sx={{ fontSize: '25px', position: 'relative', color: 'black', fontWeight: 700 }} onClick={() => navigate('/CartProduct')}>
-                            <CiShoppingCart />
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    bgcolor: 'black',
-                                    color: 'white',
-                                    fontSize: '11px',
-                                    width: '18px',
-                                    height: '18px',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    top: '-7px',
-                                    left: '15px',
-                                }}
-                            >
-                                2
-                            </Box>
-                        </Box>
-                    </Box> */}
 
                     {/* Menu Section */}
                     <Box sx={{ color: 'black' }}>
