@@ -83,9 +83,9 @@ function Header() {
 
 
     const handleLogout = () => {
-        localStorage.removeItem("token"); // Clear the token
-        window.dispatchEvent(new Event("authChange")); // Notify listeners
-        navigate("/login"); // Redirect to login page
+        localStorage.removeItem("token"); 
+        window.dispatchEvent(new Event("authChange"));
+        navigate("/login"); 
     };
 
     return (

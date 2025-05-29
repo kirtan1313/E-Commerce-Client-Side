@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import Banner from './Componets/Banner/Banner'
 import Header from './Componets/Header/Header'
-import { Route, Routes, useLocation } from 'react-router';
+import { Navigate, Route, Routes, useLocation } from 'react-router';
 import Wishlist from './Componets/Wishlist/Wishlist';
 import Footer from './Componets/Footer/Footer';
 import Home from './Componets/Home/Home';
@@ -14,6 +14,7 @@ import Contact from './Componets/Contact/Contact';
 import { AnimatePresence, motion } from 'framer-motion';
 import Login from './Componets/Login/Login';
 import SignUp from './Componets/Register/Register';
+import { useState } from 'react';
 
 function App() {
   const theme = createTheme({
@@ -30,10 +31,12 @@ function App() {
     exit: { opacity: 0, y: -20, transition: { duration: 0.4, ease: 'easeInOut' } },
   };
 
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <Header />
+   
         <AnimatePresence exitBeforeEnter mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route
@@ -137,8 +140,7 @@ function App() {
 
             <Route
               path="/login"
-              element={
-                <motion.div
+                element={<motion.div
                   variants={pageTransition}
                   initial="initial"
                   animate="animate"
@@ -146,8 +148,7 @@ function App() {
                   style={{ minHeight: '100vh' }}
                 >
                   <Login />
-                </motion.div>
-              }
+                </motion.div>}
             />
 
             <Route
